@@ -1,14 +1,24 @@
-# app.py
+import streamlit as st
+import tempfile
+import os
+from src.stream_processor import process_video
 
-import argparse
-import subprocess
-import sys
+st.title("Real-Time Person Detection & Bi-Directional Counting")
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--mode", choices=["video", "webcam"], required=True)
-args = parser.parse_args()
+uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
 
-if args.mode == "video":
-    subprocess.run([sys.executable, "scripts/run_video.py"])
-elif args.mode == "webcam":
-    subprocess.run([sys.executable, "scripts/run_webcam.py"])
+if uploaded_file is not None:
+
+    with tempfile.NamedTemporaryFile(delete=False) as temp_input:
+        temp_input.write(uploaded_file.read())
+        input_path = temp_input.name
+
+    output_path = "processed_output.mp4"
+
+    st.write("Processing video... Please wait.")
+
+    process_video(input_path, output_path)
+
+    st.success("Processing complete!")
+
+    st.video(output_path)
