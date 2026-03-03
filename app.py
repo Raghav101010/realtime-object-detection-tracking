@@ -13,12 +13,17 @@ if uploaded_file is not None:
         temp_input.write(uploaded_file.read())
         input_path = temp_input.name
 
-    output_path = "processed_output.mp4"
+    output_path = os.path.abspath("processed_output.mp4")
 
     st.write("Processing video... Please wait.")
 
-    process_video(input_path, output_path)
+    final_path = process_video(input_path, output_path)
 
     st.success("Processing complete!")
 
-    st.video(output_path)
+    with open(final_path, "rb") as f:
+        video_bytes = f.read()
+
+    st.video(video_bytes, format="video/mp4")
+
+    st.write("Output file size:", os.path.getsize(output_path))

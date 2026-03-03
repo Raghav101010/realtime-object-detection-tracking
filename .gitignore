@@ -2,3 +2,9 @@ venv/
 __pycache__/
 *.pyc
 .env
+*.pyo
+*.mp4
+*.avi
+*.mov
+*.log
+.streamlit/
